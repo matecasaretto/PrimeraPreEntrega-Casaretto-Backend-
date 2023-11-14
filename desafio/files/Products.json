@@ -1,0 +1,47 @@
+[
+	{
+		"title": "Pantalón Modificado",
+		"description": "Pantalón de cuero modificado",
+		"price": 1200,
+		"thumbnail": "pantalon_modificado.jpg",
+		"code": 456,
+		"stock": 8,
+		"id": 1
+	},
+	{
+		"title": "Pantalón",
+		"description": "Pantalón de cuero",
+		"price": 1000,
+		"thumbnail": "pantalon.jpg",
+		"code": 123,
+		"stock": 5,
+		"id": 2
+	},
+	{
+		"title": "Pantalón Update",
+		"description": "Pantalón de cuero Update",
+		"price": 1200,
+		"thumbnail": "pantalon_Update.jpg",
+		"code": 456,
+		"stock": 8,
+		"id": 3
+	},
+	{
+		"title": "Pantalón",
+		"description": "Pantalón de cuero",
+		"price": 1000,
+		"thumbnail": "pantalon.jpg",
+		"code": 123,
+		"stock": 5,
+		"id": 4
+	},
+	{
+		"title": "Pantalón",
+		"description": "Pantalón de cuero",
+		"price": 1000,
+		"thumbnail": "pantalon.jpg",
+		"code": 123,
+		"stock": 5,
+		"id": 5
+	}
+]
