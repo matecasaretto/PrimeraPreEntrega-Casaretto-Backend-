@@ -1,5 +1,3 @@
-// index.js
-
 import ProductManager from "./managers/ProductManager.js";
 
 const manager = new ProductManager();

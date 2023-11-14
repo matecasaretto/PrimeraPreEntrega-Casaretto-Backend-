@@ -1,5 +1,3 @@
-// En la clase ProductManager
-
 import fs from 'fs/promises';
 
 const path = './files/Products.json';
@@ -95,7 +93,7 @@ export default class ProductManager {
         products[indexToUpdate] = updatedProduct;
 
         await fs.writeFile(path, JSON.stringify(products, null, '\t'));
-        
+
         console.log(`Producto con ID ${id} actualizado.`);
       } else {
         console.log(`No se encontró ningún producto con el ID ${id}. No se realizó ninguna actualización.`);
