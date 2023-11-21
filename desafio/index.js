@@ -1,6 +1,59 @@
+import express from 'express';
 import ProductManager from "./managers/ProductManager.js";
 
 const manager = new ProductManager();
+const app = express();
+const PORT = 8084;
+
+app.use(express.json());
+
+
+app.get('/products', async (req, res) => {
+  try {
+    const products = await manager.consultarProductos();
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+
+app.post('/products', async (req, res) => {
+  try {
+    const newProduct = req.body;
+    const addedProduct = await manager.addProduct(newProduct);
+    res.status(201).json({ product: addedProduct });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+
+app.get('/products/:pid', async (req, res) => {
+  try {
+    const productId = Number(req.params.pid);
+    const product = await manager.getProductById(productId);
+
+    if (!product) {
+      res.status(404).json({
+        error: 'Producto no encontrado'
+      });
+    } else {
+      res.json({ product });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto: ${PORT}`);
+});
+
+
 
 const env = async () => {
   try {
