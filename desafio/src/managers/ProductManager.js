@@ -1,12 +1,15 @@
 import fs from 'fs/promises';
-
-const path = './files/Products.json';
+import path from 'path';
+import { __dirname } from "../utils.js";
 
 export default class ProductManager {
+  constructor() {
+    this.filePath = path.join(__dirname, 'files', 'Products.json');
+  }
+
   async consultarProductos() {
     try {
-      await fs.access(path);
-      const data = await fs.readFile(path, 'utf-8');
+      const data = await fs.readFile(this.filePath, 'utf-8');
       const products = JSON.parse(data);
       return products;
     } catch (error) {
@@ -22,21 +25,24 @@ export default class ProductManager {
   async addProduct(newProduct) {
     try {
       let products = await this.consultarProductos();
-      
+  
       if (!Array.isArray(products)) {
         products = [];
       }
-
+  
       if (products.length === 0) {
         newProduct.id = 1;
       } else {
         newProduct.id = products[products.length - 1].id + 1;
       }
-
+  
+      newProduct.status = true; // Agregamos el campo 'status' con valor true
       products.push(newProduct);
-
-      await fs.writeFile(path, JSON.stringify(products, null, '\t'));
-      
+  
+      console.log('Product added:', newProduct);
+  
+      await fs.writeFile(this.filePath, JSON.stringify(products, null, '\t'));
+  
       return products;
     } catch (error) {
       console.error('Error al agregar producto:', error.message);
@@ -69,7 +75,7 @@ export default class ProductManager {
   
       if (indexToRemove !== -1) {
         products.splice(indexToRemove, 1);
-        await fs.writeFile(path, JSON.stringify(products, null, '\t'));
+        await fs.writeFile(this.filePath, JSON.stringify(products, null, '\t'));
         console.log(`Producto con ID ${id} eliminado.`);
       } else {
         console.log(`No se encontró ningún producto con el ID ${id}. No se eliminó nada.`);
@@ -78,7 +84,7 @@ export default class ProductManager {
       console.error('Error al eliminar producto por ID:', error.message);
       throw error;
     }
-  }
+  } 
 
   async updateProduct(id, updatedProduct) {
     try {
@@ -92,7 +98,7 @@ export default class ProductManager {
 
         products[indexToUpdate] = updatedProduct;
 
-        await fs.writeFile(path, JSON.stringify(products, null, '\t'));
+        await fs.writeFile(this.filePath, JSON.stringify(products, null, '\t'));
 
         console.log(`Producto con ID ${id} actualizado.`);
       } else {
