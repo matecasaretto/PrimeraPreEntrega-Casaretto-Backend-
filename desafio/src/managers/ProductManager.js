@@ -3,8 +3,9 @@ import path from 'path';
 import { __dirname } from "../utils.js";
 
 export default class ProductManager {
-  constructor() {
+  constructor(io) {
     this.filePath = path.join(__dirname, 'files', 'Products.json');
+    this.io = io;
   }
 
   async consultarProductos() {
@@ -36,12 +37,15 @@ export default class ProductManager {
         newProduct.id = products[products.length - 1].id + 1;
       }
   
-      newProduct.status = true; // Agregamos el campo 'status' con valor true
+      newProduct.status = true; 
       products.push(newProduct);
   
       console.log('Product added:', newProduct);
   
       await fs.writeFile(this.filePath, JSON.stringify(products, null, '\t'));
+
+      
+      this.io.emit('addProduct', { product: newProduct });
   
       return products;
     } catch (error) {
@@ -53,8 +57,11 @@ export default class ProductManager {
   async getProductById(id) {
     try {
       const products = await this.consultarProductos();
+      console.log('All products:', products);
+  
       const product = products.find(product => product.id === id);
-
+      console.log(`Product with ID ${id}:`, product);
+  
       if (product) {
         return product;
       } else {
@@ -77,6 +84,9 @@ export default class ProductManager {
         products.splice(indexToRemove, 1);
         await fs.writeFile(this.filePath, JSON.stringify(products, null, '\t'));
         console.log(`Producto con ID ${id} eliminado.`);
+
+        
+        this.io.emit('productChanged');
       } else {
         console.log(`No se encontró ningún producto con el ID ${id}. No se eliminó nada.`);
       }
@@ -101,6 +111,9 @@ export default class ProductManager {
         await fs.writeFile(this.filePath, JSON.stringify(products, null, '\t'));
 
         console.log(`Producto con ID ${id} actualizado.`);
+
+        // Emitir evento 'productChanged'
+        this.io.emit('productChanged');
       } else {
         console.log(`No se encontró ningún producto con el ID ${id}. No se realizó ninguna actualización.`);
       }
